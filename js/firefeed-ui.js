@@ -97,11 +97,13 @@ FirefeedUI.prototype._pageController = function(url) {
 };
 
 FirefeedUI.prototype._postHandler = function(e) {
+  var sparkFullName = $("#spark-fullname");
+  var sparkShortName = $("#spark-name");
   var sparkText = $("#spark-input");
   var sparkButton = $("#spark-button");
   var containerEl = $("#spark-button-div");
   var qntyCtrl = $("#qnty");
-  var location = document.getElementById("inputLocation").innerHTML;
+  var sparkLocation = $("#spark-location");
   var qntyNum = document.getElementById("qnty").value;
   var message = $("<div>").addClass("msg").html("Posting...");
 
@@ -109,7 +111,7 @@ FirefeedUI.prototype._postHandler = function(e) {
   e.preventDefault();
   sparkButton.replaceWith(message);
   self._spinner.spin(containerEl.get(0));
-  self._firefeed.post(sparkText.val(), location, qntyNum, function(err, done) {
+  self._firefeed.post(sparkFullName.val(), sparkShortName.val(), sparkText.val(), sparkLocation.val(), qntyNum, function(err, done) {
     if (!err) {
       message.html("Posted!").css("background", "#008000");
       sparkText.val("");
@@ -266,9 +268,6 @@ FirefeedUI.prototype.renderTimeline = function(info) {
   var self = this;
   $("#header").html(Mustache.to_html($("#tmpl-page-header").html(), {user: self._loggedIn}));
 
-  // Render placeholders for location / bio if not filled in.
-  info.location = info.location.substr(0, 80) || "Your Address...";
-
   // Render body.
   var content = Mustache.to_html($("#tmpl-timeline-content").html(), info);
   var body = Mustache.to_html($("#tmpl-content").html(), {
@@ -279,18 +278,19 @@ FirefeedUI.prototype.renderTimeline = function(info) {
   // Attach textarea handlers.
   var charCount = $("#c-count");
   var sparkText = $("#spark-input");
+  var sparkLocation = $("#spark-location");
   var qntyNum = $("#qnty");
 
   $("#spark-button").css("visibility", "hidden");
   function _textAreaHandler() {
     var text = sparkText.val();
     var num = qntyNum.val();
-    var loc = document.getElementById("inputLocation").innerHTML;
+    var loc = sparkLocation.val();
     charCount.text("" + (self._limit - text.length));
     if (text.length > self._limit) {
       charCount.css("color", "#FF6347");
       $("#spark-button").css("visibility", "hidden");
-    } else if (loc == "Your Address..." || num == "" || Number(num) > 100 || text.length == 0) {
+    } else if (loc == "Location" || num == "" || Number(num) > 100 || text.length == 0) {
       $("#spark-button").css("visibility", "hidden");
     } else {
       charCount.css("color", "#999");
@@ -311,23 +311,6 @@ FirefeedUI.prototype.renderTimeline = function(info) {
     // self._firefeed.onNewSpark.bind(self._firefeed)
     self._firefeed.onLatestSpark.bind(self._firefeed)
   );
-
-  // Get some "suggested" users.
-  self._firefeed.getSuggestedUsers(function(userid, info) {
-    info.id = userid;
-    $(Mustache.to_html($("#tmpl-suggested-user").html(), info)).
-      appendTo("#suggested-users");
-    var button = $("#followBtn-" + userid);
-    // Fade out the suggested user if they were followed successfully.
-    button.click(function(e) {
-      e.preventDefault();
-      button.remove();
-      self._firefeed.follow(userid, function(err, done) {
-        // TODO FIXME: Check for errors!
-        $("#followBox-" + userid).fadeOut(1500);
-      });
-    });
-  });
 
   // Make profile fields editable.
   $(".editable").editable(function(value, settings) {

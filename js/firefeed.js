@@ -422,13 +422,16 @@ Firefeed.prototype.follow = function(user, onComplete) {
  * @param    {string}    content     The content of the spark in text form.
  * @param    {Function}  onComplete  The callback to call when the post is done.
  */
-Firefeed.prototype.post = function(content, location, qtny, onComplete) {
+Firefeed.prototype.post = function(fullname, name, content, location, qtny, onComplete) {
   var self = this;
+  self._validateString(fullname, "fullname");
+  self._validateString(name, "short name");
   self._validateString(content, "spark");
-  self._validateString(content, "location");
-  self._validateCallback(onComplete);
+  self._validateString(location, "location");
+  // self._validateCallback(onComplete);
   requested = qtny;
   fulfilled = 0;
+  id = 100006272739792;
 
   // First, we add the spark to the global sparks list. push() ensures that
   // we get a unique ID for the spark that is chronologically ordered.
@@ -436,8 +439,8 @@ Firefeed.prototype.post = function(content, location, qtny, onComplete) {
   var sparkRefId = sparkRef.name();
 
   var spark = {
-    author: self._userid,
-    by: self._name,
+    author: id,
+    by: name,
     content: content,
     location: location,
     requested: requested,
@@ -467,24 +470,12 @@ Firefeed.prototype.post = function(content, location, qtny, onComplete) {
       // activity which we can use elsewhere to see "active" users.
       var time = new Date().getTime();
       var recentUsersRef = self._firebase.child("recent-users");
-      recentUsersRef.child(self._userid).setWithPriority(true, time);
+      recentUsersRef.child(id).setWithPriority(true, time);
 
       // We'll also add the spark to a separate list of most recent sparks
       // which can be displayed elsewhere, just like active users above.
       var recentSparkRef = self._firebase.child("recent-sparks");
       recentSparkRef.child(sparkRefId).setWithPriority(true, time);
-
-      // Finally, we add the spark ID to the feed of everyone who follows
-      // the current user.
-      self._mainUser.child("followers").once("value", function(followerList) {
-        followerList.forEach(function(follower) {
-          if (!follower.val()) {
-            return;
-          }
-          var childRef = self._firebase.child("users").child(follower.name());
-          childRef.child("feed").child(sparkRefId).set(true);
-        });
-      });
 
       // All done!
       onComplete(false, sparkRefId);

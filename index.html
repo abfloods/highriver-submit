@@ -56,49 +56,36 @@
 
       <script id="tmpl-index-content" type="text/html">
         <div class="threefifth center aligncenter">
-		  <h1 class="main-heading"><img src="img/wordmark-large.png" alt="ABFloods" /></h1>
-          <h2 class="subheading">
-            Fast and effective, ABFloods helps you crowdsource the help that you need! Or you can log in as a volunteer to find which of your neighbours need help. It&rsquo;s like twitter crossed with kickstarter!
-          </h2>
-          <p class="big-copy pushv8">Please ask for no more resources than you need, and accept only the requests that you can fulfill.</p>
-
+          <p>This is the administrative homepage for adding ABFloods requests</p>
           <div id="login-div" class="pushv4">
-            <a id="login-button" href="#" class="btn clean" title="Why Facebook? It's quick for you to login without needing email">
-              <span class="icon facebook"></span>
-              <span>Sign in with Facebook</span>
-            </a>
-          </div>
-
-		<div class="pushv4">
-		   <a href="about.html" class="btn default pushv4">About</a>
-		   <a href="privacy.html" class="btn default pushv4">Privacy Policy</a>
-	    </div>
-
-          <hr/>
+		            <a id="login-button" href="#" class="btn clean">
+		              <span class="icon facebook"></span>
+		              <span>Sign in with Facebook</span>
+		            </a>
+		   </div>
         </div>
       </script>
 
       <script id="tmpl-timeline-content" type="text/html">
         <div class="third">
           <div class="media">
-            <div class="img avatar">
-              <a class="profile-link" href="/?profile={{id}}"><img src="{{pic}}" alt="{{name}}"></a>
-            </div>
-            <div class="body" id="profile">
-              <h2 class="end"><a class="profile-link" href="/?profile={{id}}">{{name}}</a></h2>
-              <div class="big-copy end">
-                <div class="editable" id="inputLocation">{{location}}</div>
-              </div>
-            </div>
-          </div>
-          <div class="field">
-            <textarea id="spark-input" class="text" rows="4" cols="10" placeholder="List the help and supplies you need. (Examples: Heavy Lifting, Garbage Disposal, Diapers, Laundry, etc.)"></textarea>
-          </div>
-          <small class="field-help"><span id="c-count"></span> characters remaining</small>
-		  <div class="qnty-selector"><textarea id='qnty' class="text" rows="1" cols="3" placeholder="People required"/></div>
-          <div id="spark-button-div">
-            <a id="spark-button" href="#" class="btn default full pushv4">Post Request</a>
-          </div>
+            <div class="field">
+	            <textarea id="spark-fullname" class="text" rows="1" cols="10" placeholder="Full Name"></textarea>
+	          	<div class="field">
+		            <textarea id="spark-name" class="text" rows="1" cols="10" placeholder="First/Short Name"></textarea>
+	          </div>
+	          <div class="field">
+	            <textarea id="spark-location" class="text" rows="1" cols="10" placeholder="Location"></textarea>
+	          </div>
+			  <div class="field">
+	            <textarea id="spark-input" class="text" rows="4" cols="10" placeholder="List the help and supplies you need. (Examples: Heavy Lifting, Garbage Disposal, Diapers, Laundry, etc.)"></textarea>
+	          </div>
+	          <small class="field-help"><span id="c-count"></span> characters remaining</small>
+			  <div class="qnty-selector"><textarea id='qnty' class="text" rows="1" cols="3" placeholder="People required"/></div>
+	          <div id="spark-button-div">
+	            <a id="spark-button" href="#" class="btn default full pushv4">Post Request</a>
+	          </div>
+	</div></div>
 
           <div class="separator pushv4"></div>
 
